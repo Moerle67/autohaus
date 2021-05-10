@@ -25,7 +25,7 @@
                 <?php
                   $sql =  'SELECT hersteller_id as id, Bezeichnung FROM hersteller ORDER BY bezeichnung';
                   foreach  ($conn->query($sql) as $row) {
-                    echo '<option selected value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
+                    echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
                   }
                 ?>
                 </select>
