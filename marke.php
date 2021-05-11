@@ -18,21 +18,62 @@
       <h1>Autohaus &copy; Moerlisoft</h1>
       <div class="row">         
         <div class="col-md-10">
-          <form>          
+          <form method="POST">          
             <div class="row">
-              <div class="col">
-                <select class="form-select" aria-label="Auswahl Hersteller">
+              <div class="col-2">
+                <select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">
                 <?php
-                  $sql =  'SELECT hersteller_id as id, Bezeichnung FROM hersteller ORDER BY bezeichnung';
+                if ($_SERVER["REQUEST_METHOD"] == "GET" || (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST["REQUEST_METHOD"] == "POST")) {
+                  $sql =  'SELECT hersteller_id AS id,hersteller.Bezeichnung as Bezeichnung FROM modell 
+                  INNER JOIN fahrzeug 
+                  INNER JOIN hersteller 
+                  ON fahrzeug.verfügbar = 1 AND 
+                  fahrzeug.modell = modell.modell_id AND 
+                  modell.hersteller = hersteller.hersteller_id AND
+                  fahrzeug.frz_id IS NOT NULL
+                  GROUP BY hersteller.Bezeichnung
+                  ORDER BY hersteller.Bezeichnung';
                   foreach  ($conn->query($sql) as $row) {
                     echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
+                  }
+                } else {
+                    $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
+                    $result = $conn->query($sql)->fetch();
+                    //var_dump($result);
+                    echo '<option value="'.$result["hersteller_id"].'">'.$result["Bezeichnung"].'</option>';
+                    echo $_POST;
                   }
                 ?>
                 </select>
               </div>
-              <div class="col">
-                <button type="submit" class="btn btn-primary">Modell bestimmen</button>
+              <div class="col-3">
+                <button type="submit" value="btnHerstellung" class="btn btn-primary" name="btn1" 
+                <?php echo $_SERVER["REQUEST_METHOD"]; ?>
+                <?php if ($_SERVER["REQUEST_METHOD"] != "GET" && $_POST["btn1"]=="btnHerstellung") echo " disabled"; ?>
+                >Hersteller bestimmen</button>
               </div>
+              <?php
+              if ($_SERVER["REQUEST_METHOD"] != "GET" && $_POST["btn1"]=="btnHerstellung") {
+                // Modell einlesen
+                $hersteller_id = $_POST["selHersteller"];
+                echo '<div class="col-2">';
+                echo '<select class="form-select"  name="selModell">';
+                $sql =  "SELECT * FROM modell 
+                INNER JOIN fahrzeug 
+                INNER JOIN hersteller 
+                ON fahrzeug.verfügbar = 1 AND fahrzeug.modell = modell.modell_id 
+                AND modell.hersteller = hersteller.hersteller_id 
+                AND modell.hersteller = '$hersteller_id' AND 
+                fahrzeug.frz_id IS NOT NULL 
+                GROUP BY modell.bezeichnung;";
+                foreach  ($conn->query($sql) as $row) {
+                  echo '<option value="'.$row['modell_id'].'">'.$row['bezeichnung'].'</option>';
+                }
+                echo '</select>';
+                echo '</div>';
+              } 
+              
+              ?>
             </div>
           </form>
         </div>        
