@@ -17,9 +17,9 @@
       ?>
       <h1>Autohaus &copy; Moerlisoft</h1>
       <div class="row">         
-        <div class="col-10">
+        <div class="col-md-10">
           <form>          
-            <div class="form-row">
+            <div class="row">
               <div class="col">
                 <select class="form-select" aria-label="Auswahl Hersteller">
                 <?php
