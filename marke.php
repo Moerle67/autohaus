@@ -21,37 +21,33 @@
           <form method="POST">          
             <div class="row">
               <div class="col-2">
-                <select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">
-                <?php
-                if ($_SERVER["REQUEST_METHOD"] == "GET" || (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST["REQUEST_METHOD"] == "POST")) {
-                  $sql =  'SELECT hersteller_id AS id,hersteller.Bezeichnung as Bezeichnung FROM modell 
-                  INNER JOIN fahrzeug 
-                  INNER JOIN hersteller 
-                  ON fahrzeug.verfügbar = 1 AND 
-                  fahrzeug.modell = modell.modell_id AND 
-                  modell.hersteller = hersteller.hersteller_id AND
-                  fahrzeug.frz_id IS NOT NULL
-                  GROUP BY hersteller.Bezeichnung
-                  ORDER BY hersteller.Bezeichnung';
-                  foreach  ($conn->query($sql) as $row) {
-                    echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
-                  }
-                } else {
-                    $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
-                    $result = $conn->query($sql)->fetch();
-                    //var_dump($result);
-                    echo '<option value="'.$result["hersteller_id"].'">'.$result["Bezeichnung"].'</option>';
-                    echo $_POST;
-                  }
-                ?>
-                </select>
-              </div>
+                  <?php
+                echo '<select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">';
+                if ($_SERVER["REQUEST_METHOD"] == "GET" || (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST["btn1"] == "return"))) {
+                      $sql =  'SELECT hersteller_id AS id,hersteller.Bezeichnung as Bezeichnung FROM modell 
+                      INNER JOIN fahrzeug 
+                      INNER JOIN hersteller 
+                      ON fahrzeug.verfügbar = 1 AND 
+                      fahrzeug.modell = modell.modell_id AND 
+                      modell.hersteller = hersteller.hersteller_id 
+                      GROUP BY hersteller.Bezeichnung
+                      ORDER BY hersteller.Bezeichnung';
+                      foreach  ($conn->query($sql) as $row) {
+                        echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
+                      } ?>
+                 </select>
+              </div>    
               <div class="col-3">
-                <button type="submit" value="btnHerstellung" class="btn btn-primary" name="btn1" 
-                <?php echo $_SERVER["REQUEST_METHOD"]; ?>
-                <?php if ($_SERVER["REQUEST_METHOD"] != "GET" && $_POST["btn1"]=="btnHerstellung") echo " disabled"; ?>
-                >Hersteller bestimmen</button>
+                <button type="submit" class="btn btn-primary" name="btn1" value="btnHersteller">Hersteller festlegen</button>
               </div>
+            <?php 
+                } else if (($_POST["btn1"] == "btnHersteller")){
+                  echo '<select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">';
+                  $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
+                  $result = $conn->query($sql)->fetch();
+                  echo '<option value="'.$result['hersteller_id'].'">'.$result['Bezeichnung'].'</option>';
+                  echo '<\select>';
+                    ?>
               <?php
               if ($_SERVER["REQUEST_METHOD"] != "GET" && $_POST["btn1"]=="btnHerstellung") {
                 // Modell einlesen
@@ -63,8 +59,7 @@
                 INNER JOIN hersteller 
                 ON fahrzeug.verfügbar = 1 AND fahrzeug.modell = modell.modell_id 
                 AND modell.hersteller = hersteller.hersteller_id 
-                AND modell.hersteller = '$hersteller_id' AND 
-                fahrzeug.frz_id IS NOT NULL 
+                AND modell.hersteller = '$hersteller_id'
                 GROUP BY modell.bezeichnung;";
                 foreach  ($conn->query($sql) as $row) {
                   echo '<option value="'.$row['modell_id'].'">'.$row['bezeichnung'].'</option>';
@@ -72,7 +67,7 @@
                 echo '</select>';
                 echo '</div>';
               } 
-              
+            }  
               ?>
             </div>
           </form>
