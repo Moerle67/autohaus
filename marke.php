@@ -32,15 +32,29 @@
                         modell.hersteller = hersteller.hersteller_id 
                         GROUP BY hersteller.Bezeichnung
                         ORDER BY hersteller.Bezeichnung';
-                    echo '<select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">';
-                    foreach  ($conn->query($sql) as $row) {
-                          echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
-                    } 
+                    $result = $conn->query($sql)->fetchAll();
+                    // Anzahl gefundener Datensätze
+                    if (count($result)>1) {
+                      // Liste generieren 
+                      echo '<select class="form-select" name="selHersteller">';
+                      foreach  ($result as $row) {
+                        echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
+                      }
                     echo '</select>';
-                  echo '</div>';    
-                  echo '<div class="col-3">';
-                    echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnHersteller">Hersteller festlegen</button>';
-                  echo '</div>';
+                    } else if (count($result)==1) {
+                      // ein Datensatz --> Textfeld reicht  
+                      echo '<input type="text" readonly class="form-control" value="'.$result[0]['Bezeichnung'].'">';
+                      echo '<input type="hidden" name="selHersteller" value="'.$result[0]['id'].'">';
+                    } else
+                      // nichts --> Fehlermeldung
+                      echo '<input type="text" readonly class="form-control" value="Kein Kfz verfügbar!">';
+                  echo '</div>'; 
+                  if (count($result)>0) {
+                    // Weiter nur, wenn Fahrzeug verfügbar ist   
+                    echo '<div class="col-3">';
+                      echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnHersteller">Hersteller festlegen</button>';
+                    echo '</div>';
+                  }
                 } else if (($_POST["btn1"] == "btnHersteller")){
                   // Zweite Runde Auswahl Model
                   echo '<div class="col-2">';
@@ -61,11 +75,18 @@
                       AND modell.hersteller = hersteller.hersteller_id 
                       AND modell.hersteller = '$hersteller_id'
                       GROUP BY modell.bezeichnung;";
+                  $result = $conn->query($sql)->fetchAll();
+                  if (count($result)>1) {
                     echo '<select class="form-select"  name="selModell">';
                     foreach  ($conn->query($sql) as $row) {
                       echo '<option value="'.$row['modell_id'].'">'.$row['bezeichnung'].'</option>';
                     }
                     echo '</select>';
+                  } else {
+                    // ein Datensatz --> Textfeld reicht  
+                    echo '<input type="text" readonly class="form-control" value="'.$result[0]['bezeichnung'].'">';
+                    echo '<input type="hidden" name="selModell" value="'.$result[0]['modell_id'].'">';
+                  }
                   echo '</div>';
                   echo '<div class="col-3">';
                     echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnModell">Modell festlegen</button>';
@@ -82,9 +103,32 @@
                     $result = $conn->query($sql)->fetch();
                     echo '<input type="text" readonly class="form-control" name="txtModell" value="'.$result['bezeichnung'].'">';
                     echo '<input type="hidden" name="txtModellId" value="'.$result['modell_id'].'">';
-                  echo '</div>';    
+                  echo '</div>';  
+                  echo '<div class="col-2">';
+                  // Liste Fahrzeuge (Kennzeichen)
+                  $sql =  'SELECT * FROM fahrzeug WHERE modell='.$_POST['selModell'].' AND verfügbar=1;' ;
+                  $result = $conn->query($sql)->fetchAll();
+                  if (count($result)>1) {
+                    echo '<select class="form-select"  name="selFahrzeug">';
+                    foreach  ($conn->query($sql) as $row) {
+                      echo '<option value="'.$row['frz_id'].'">'.$row['kennzeichen'].'</option>';
+                    }
+                    echo '</select>';
+                  } else {
+                    // Nur ein Fahrzeug
+                    echo '<input type="text" readonly class="form-control" value="'.$result[0]['kennzeichen'].'">';
+                    echo '<input type="hidden" name="selModell" value="'.$result[0]['frz_id'].'">';
+                 
+                  }
+                  echo '</div>';
+                  echo '<div class="col-3">';
+                    echo '<button type="submit" class="btn btn-success" name="btn1" value="btnModell">Vermieten</button>';
+                  echo '</div>';
                 }
                 ?>
+                <div class="col-3">
+                  <button type="submit" class="btn btn-danger" name="btn1" value="return">Abbruch</button>';
+                </div>
             </div>
           </form>
         </div>        

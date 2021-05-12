@@ -1,12 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Mai 2021 um 08:24
--- Server-Version: 10.4.14-MariaDB
--- PHP-Version: 7.4.11
+-- Erstellungszeit: 12. Mai 2021 um 12:54
+-- Server-Version: 10.4.17-MariaDB
+-- PHP-Version: 8.0.0
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -29,7 +30,6 @@ USE `autohaus`;
 -- Tabellenstruktur f체r Tabelle `auftrag`
 --
 
-DROP TABLE IF EXISTS `auftrag`;
 CREATE TABLE `auftrag` (
   `auftrag_id` int(11) NOT NULL,
   `kunde` int(11) NOT NULL,
@@ -46,7 +46,6 @@ CREATE TABLE `auftrag` (
 -- Tabellenstruktur f체r Tabelle `fahrzeug`
 --
 
-DROP TABLE IF EXISTS `fahrzeug`;
 CREATE TABLE `fahrzeug` (
   `frz_id` int(11) NOT NULL,
   `modell` int(11) NOT NULL,
@@ -64,7 +63,9 @@ INSERT INTO `fahrzeug` (`frz_id`, `modell`, `kennzeichen`, `preisgruppe`, `verf�
 (2, 17, 'S-MS-002', 4, 1),
 (3, 17, 'S-MS-003', 3, 1),
 (4, 17, 'S-MS-004', 4, 1),
-(6, 4, 'S-MS-105', 2, 1);
+(6, 4, 'S-MS-105', 2, 1),
+(7, 7, 'S-MS 105', 4, 1),
+(8, 18, 'S-MS-106', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -72,7 +73,6 @@ INSERT INTO `fahrzeug` (`frz_id`, `modell`, `kennzeichen`, `preisgruppe`, `verf�
 -- Tabellenstruktur f체r Tabelle `hersteller`
 --
 
-DROP TABLE IF EXISTS `hersteller`;
 CREATE TABLE `hersteller` (
   `hersteller_id` int(11) NOT NULL,
   `Bezeichnung` varchar(255) NOT NULL
@@ -95,7 +95,6 @@ INSERT INTO `hersteller` (`hersteller_id`, `Bezeichnung`) VALUES
 -- Tabellenstruktur f체r Tabelle `kunde`
 --
 
-DROP TABLE IF EXISTS `kunde`;
 CREATE TABLE `kunde` (
   `kunde_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -108,7 +107,6 @@ CREATE TABLE `kunde` (
 -- Tabellenstruktur f체r Tabelle `mitarbeiter`
 --
 
-DROP TABLE IF EXISTS `mitarbeiter`;
 CREATE TABLE `mitarbeiter` (
   `ma_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -121,7 +119,6 @@ CREATE TABLE `mitarbeiter` (
 -- Tabellenstruktur f체r Tabelle `modell`
 --
 
-DROP TABLE IF EXISTS `modell`;
 CREATE TABLE `modell` (
   `modell_id` int(11) NOT NULL,
   `bezeichnung` varchar(255) NOT NULL,
@@ -160,7 +157,6 @@ INSERT INTO `modell` (`modell_id`, `bezeichnung`, `hersteller`) VALUES
 -- Tabellenstruktur f체r Tabelle `preisgruppe`
 --
 
-DROP TABLE IF EXISTS `preisgruppe`;
 CREATE TABLE `preisgruppe` (
   `preisgr_id` int(11) NOT NULL,
   `bezeichnung` varchar(255) NOT NULL,
@@ -246,7 +242,7 @@ ALTER TABLE `auftrag`
 -- AUTO_INCREMENT f체r Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `frz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `frz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT f체r Tabelle `hersteller`
@@ -302,6 +298,7 @@ ALTER TABLE `fahrzeug`
 --
 ALTER TABLE `modell`
   ADD CONSTRAINT `modell_ibfk_1` FOREIGN KEY (`hersteller`) REFERENCES `hersteller` (`hersteller_id`);
+SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
