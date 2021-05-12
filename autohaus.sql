@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 07. Mai 2021 um 13:27
--- Server-Version: 10.4.17-MariaDB
--- PHP-Version: 8.0.0
+-- Erstellungszeit: 12. Mai 2021 um 08:24
+-- Server-Version: 10.4.14-MariaDB
+-- PHP-Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `autohaus`
 --
+CREATE DATABASE IF NOT EXISTS `autohaus` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `autohaus`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `auftrag`
 --
 
+DROP TABLE IF EXISTS `auftrag`;
 CREATE TABLE `auftrag` (
   `auftrag_id` int(11) NOT NULL,
   `kunde` int(11) NOT NULL,
@@ -43,12 +46,25 @@ CREATE TABLE `auftrag` (
 -- Tabellenstruktur für Tabelle `fahrzeug`
 --
 
+DROP TABLE IF EXISTS `fahrzeug`;
 CREATE TABLE `fahrzeug` (
   `frz_id` int(11) NOT NULL,
   `modell` int(11) NOT NULL,
   `kennzeichen` varchar(255) NOT NULL,
-  `preisgruppe` int(11) NOT NULL
+  `preisgruppe` int(11) NOT NULL,
+  `verfügbar` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `fahrzeug`
+--
+
+INSERT INTO `fahrzeug` (`frz_id`, `modell`, `kennzeichen`, `preisgruppe`, `verfügbar`) VALUES
+(1, 17, 'S-MS-001', 3, 1),
+(2, 17, 'S-MS-002', 4, 1),
+(3, 17, 'S-MS-003', 3, 1),
+(4, 17, 'S-MS-004', 4, 1),
+(6, 4, 'S-MS-105', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -56,10 +72,22 @@ CREATE TABLE `fahrzeug` (
 -- Tabellenstruktur für Tabelle `hersteller`
 --
 
+DROP TABLE IF EXISTS `hersteller`;
 CREATE TABLE `hersteller` (
   `hersteller_id` int(11) NOT NULL,
   `Bezeichnung` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `hersteller`
+--
+
+INSERT INTO `hersteller` (`hersteller_id`, `Bezeichnung`) VALUES
+(1, 'Daimler'),
+(2, 'Porsche'),
+(3, 'VW'),
+(4, 'Audi'),
+(5, 'BMW');
 
 -- --------------------------------------------------------
 
@@ -67,6 +95,7 @@ CREATE TABLE `hersteller` (
 -- Tabellenstruktur für Tabelle `kunde`
 --
 
+DROP TABLE IF EXISTS `kunde`;
 CREATE TABLE `kunde` (
   `kunde_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -79,6 +108,7 @@ CREATE TABLE `kunde` (
 -- Tabellenstruktur für Tabelle `mitarbeiter`
 --
 
+DROP TABLE IF EXISTS `mitarbeiter`;
 CREATE TABLE `mitarbeiter` (
   `ma_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -91,11 +121,38 @@ CREATE TABLE `mitarbeiter` (
 -- Tabellenstruktur für Tabelle `modell`
 --
 
+DROP TABLE IF EXISTS `modell`;
 CREATE TABLE `modell` (
   `modell_id` int(11) NOT NULL,
   `bezeichnung` varchar(255) NOT NULL,
   `hersteller` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `modell`
+--
+
+INSERT INTO `modell` (`modell_id`, `bezeichnung`, `hersteller`) VALUES
+(1, 'A4', 4),
+(2, 'A1', 4),
+(3, 'A3 Limousine', 4),
+(4, 'Q8', 4),
+(5, 'Golf', 3),
+(6, 'Passat', 3),
+(7, 'Tiguan', 3),
+(8, 'Caddy', 3),
+(9, 'A-Klasse', 1),
+(10, 'B-Klasse', 1),
+(11, 'E-Klasse', 1),
+(12, 'S-Klasse', 1),
+(13, '2er', 5),
+(14, 'Z4', 5),
+(15, 'X', 5),
+(16, '7er', 5),
+(17, '911', 2),
+(18, 'Cayenne', 2),
+(19, 'Panamera', 2),
+(20, 'Taycan', 2);
 
 -- --------------------------------------------------------
 
@@ -103,10 +160,24 @@ CREATE TABLE `modell` (
 -- Tabellenstruktur für Tabelle `preisgruppe`
 --
 
+DROP TABLE IF EXISTS `preisgruppe`;
 CREATE TABLE `preisgruppe` (
   `preisgr_id` int(11) NOT NULL,
-  `bezeichnung` varchar(255) NOT NULL
+  `bezeichnung` varchar(255) NOT NULL,
+  `stunde` int(11) NOT NULL,
+  `km` int(11) NOT NULL,
+  `pauschal` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `preisgruppe`
+--
+
+INSERT INTO `preisgruppe` (`preisgr_id`, `bezeichnung`, `stunde`, `km`, `pauschal`) VALUES
+(1, 'PG 1', 20, 1, 10),
+(2, 'PG 2', 0, 100, 100),
+(3, 'PG III', 200, 0, 0),
+(4, 'PG IV', 300, 0, 0);
 
 --
 -- Indizes der exportierten Tabellen
@@ -126,6 +197,7 @@ ALTER TABLE `auftrag`
 --
 ALTER TABLE `fahrzeug`
   ADD PRIMARY KEY (`frz_id`),
+  ADD UNIQUE KEY `kennzeichen` (`kennzeichen`),
   ADD KEY `modell` (`modell`),
   ADD KEY `preisgruppe` (`preisgruppe`);
 
@@ -174,13 +246,13 @@ ALTER TABLE `auftrag`
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `frz_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `frz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT für Tabelle `hersteller`
 --
 ALTER TABLE `hersteller`
-  MODIFY `hersteller_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `hersteller_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `kunde`
@@ -198,13 +270,13 @@ ALTER TABLE `mitarbeiter`
 -- AUTO_INCREMENT für Tabelle `modell`
 --
 ALTER TABLE `modell`
-  MODIFY `modell_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `modell_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT für Tabelle `preisgruppe`
 --
 ALTER TABLE `preisgruppe`
-  MODIFY `preisgr_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `preisgr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints der exportierten Tabellen
