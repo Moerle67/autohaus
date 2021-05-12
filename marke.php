@@ -20,55 +20,71 @@
         <div class="col-md-10">
           <form method="POST">          
             <div class="row">
-              <div class="col-2">
-                  <?php
-                echo '<select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">';
+                <?php
+                // Erste Runde Hersteller auswählen
                 if ($_SERVER["REQUEST_METHOD"] == "GET" || (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST["btn1"] == "return"))) {
-                      $sql =  'SELECT hersteller_id AS id,hersteller.Bezeichnung as Bezeichnung FROM modell 
+                  echo '<div class="col-2">';
+                    $sql =  'SELECT hersteller_id AS id,hersteller.Bezeichnung as Bezeichnung FROM modell 
+                        INNER JOIN fahrzeug 
+                        INNER JOIN hersteller 
+                        ON fahrzeug.verfügbar = 1 AND 
+                        fahrzeug.modell = modell.modell_id AND 
+                        modell.hersteller = hersteller.hersteller_id 
+                        GROUP BY hersteller.Bezeichnung
+                        ORDER BY hersteller.Bezeichnung';
+                    echo '<select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">';
+                    foreach  ($conn->query($sql) as $row) {
+                          echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
+                    } 
+                    echo '</select>';
+                  echo '</div>';    
+                  echo '<div class="col-3">';
+                    echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnHersteller">Hersteller festlegen</button>';
+                  echo '</div>';
+                } else if (($_POST["btn1"] == "btnHersteller")){
+                  // Zweite Runde Auswahl Model
+                  echo '<div class="col-2">';
+                    // Erstes Textfeld: Nur gewählter Hersteller
+                    $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
+                    $result = $conn->query($sql)->fetch();
+                    echo '<input type="text" readonly class="form-control" name="txtHersteller" value="'.$result['Bezeichnung'].'">';
+                    echo '<input type="hidden" name="txtHerstellerId" value="'.$result['hersteller_id'].'">';
+                  echo '</div>';    
+                  // Modell einlesen
+                  $hersteller_id = $_POST["selHersteller"];
+                  echo '<div class="col-2">';
+                    $sql =  "SELECT * FROM modell 
                       INNER JOIN fahrzeug 
                       INNER JOIN hersteller 
-                      ON fahrzeug.verfügbar = 1 AND 
-                      fahrzeug.modell = modell.modell_id AND 
-                      modell.hersteller = hersteller.hersteller_id 
-                      GROUP BY hersteller.Bezeichnung
-                      ORDER BY hersteller.Bezeichnung';
-                      foreach  ($conn->query($sql) as $row) {
-                        echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
-                      } ?>
-                 </select>
-              </div>    
-              <div class="col-3">
-                <button type="submit" class="btn btn-primary" name="btn1" value="btnHersteller">Hersteller festlegen</button>
-              </div>
-            <?php 
-                } else if (($_POST["btn1"] == "btnHersteller")){
-                  echo '<select class="form-select" aria-label="Auswahl Hersteller" name="selHersteller">';
-                  $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
-                  $result = $conn->query($sql)->fetch();
-                  echo '<option value="'.$result['hersteller_id'].'">'.$result['Bezeichnung'].'</option>';
-                  echo '<\select>';
-                    ?>
-              <?php
-              if ($_SERVER["REQUEST_METHOD"] != "GET" && $_POST["btn1"]=="btnHerstellung") {
-                // Modell einlesen
-                $hersteller_id = $_POST["selHersteller"];
-                echo '<div class="col-2">';
-                echo '<select class="form-select"  name="selModell">';
-                $sql =  "SELECT * FROM modell 
-                INNER JOIN fahrzeug 
-                INNER JOIN hersteller 
-                ON fahrzeug.verfügbar = 1 AND fahrzeug.modell = modell.modell_id 
-                AND modell.hersteller = hersteller.hersteller_id 
-                AND modell.hersteller = '$hersteller_id'
-                GROUP BY modell.bezeichnung;";
-                foreach  ($conn->query($sql) as $row) {
-                  echo '<option value="'.$row['modell_id'].'">'.$row['bezeichnung'].'</option>';
+                      ON fahrzeug.verfügbar = 1 
+                      AND fahrzeug.modell = modell.modell_id 
+                      AND modell.hersteller = hersteller.hersteller_id 
+                      AND modell.hersteller = '$hersteller_id'
+                      GROUP BY modell.bezeichnung;";
+                    echo '<select class="form-select"  name="selModell">';
+                    foreach  ($conn->query($sql) as $row) {
+                      echo '<option value="'.$row['modell_id'].'">'.$row['bezeichnung'].'</option>';
+                    }
+                    echo '</select>';
+                  echo '</div>';
+                  echo '<div class="col-3">';
+                    echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnModell">Modell festlegen</button>';
+                  echo '</div>';
+                } else if (($_POST["btn1"] == "btnModell")){
+                  // Hersteller
+                  echo '<div class="col-2">'; 
+                    echo '<input type="text" readonly class="form-control" name="txtHersteller" value="'.$_POST['txtHersteller'].'">';
+                    echo '<input type="hidden" name="txtHerstellerId" value="'.$_POST['txtHerstellerId'].'">';
+                  echo '</div>';  
+                  echo '<div class="col-2">';
+                    // Zweites Textfeld: Nur gewähltes Modell
+                    $sql =  'SELECT * FROM modell WHERE modell_id='.$_POST['selModell'];
+                    $result = $conn->query($sql)->fetch();
+                    echo '<input type="text" readonly class="form-control" name="txtModell" value="'.$result['bezeichnung'].'">';
+                    echo '<input type="hidden" name="txtModellId" value="'.$result['modell_id'].'">';
+                  echo '</div>';    
                 }
-                echo '</select>';
-                echo '</div>';
-              } 
-            }  
-              ?>
+                ?>
             </div>
           </form>
         </div>        
