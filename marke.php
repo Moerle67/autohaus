@@ -20,10 +20,51 @@
         <div class="col-md-10">
           <form method="POST">          
             <div class="row">
+              <!-- Mitarbeiter -->
+              <div class="col-6 mb-3">
+                <label for="inputMitarbeiter" class="form-label">Mitarbeiter</label>
+                <select class="form-select"  name="selMa" id="inputMitarbeiter">
                 <?php
+                  var_dump($_POST);
+                  $sql =  'SELECT * FROM mitarbeiter';
+                  foreach  ($conn->query($sql) as $row) {
+                    echo '<option value="'.$row['ma_id'].'"';
+                    if (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST['selMa']==$row['ma_id'])) {
+                      echo ' selected'; 
+                    }
+                    echo '>'.$row['name'].', '.$row['vorname'].'</option>';
+                  }
+                ?>
+                </select>
+              </div>
+              <!-- Kunde -->
+              <div class="col-6 mb-3">
+              <label for="inputKunde" class="form-label">Kunde</label>
+                <select class="form-select"  name="selKunde" id="inputKunde">
+                <?php
+                  var_dump($_POST);
+                  $sql =  'SELECT * FROM kunde';
+                  foreach  ($conn->query($sql) as $row) {
+                    echo '<option value="'.$row['kunde_id'].'"';
+                    if (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST['selKunde']==$row['kunde_id'])) {
+                      echo ' selected'; 
+                    }
+                    echo '>'.$row['name'].', '.$row['vorname'].'</option>';
+                  }
+                ?>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+                <?php
+                // Auswahl Fahrzeug
                 // Erste Runde Hersteller auswählen
+                // if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                //   var_dump($_POST);
+                //   var_dump($_SERVER);
+                // }
                 if ($_SERVER["REQUEST_METHOD"] == "GET" || (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST["btn1"] == "return"))) {
-                  echo '<div class="col-2">';
+                  echo '<div class="col-2 mb-3">';
                     $sql =  'SELECT hersteller_id AS id,hersteller.Bezeichnung as Bezeichnung FROM modell 
                         INNER JOIN fahrzeug 
                         INNER JOIN hersteller 
@@ -57,7 +98,7 @@
                   }
                 } else if (($_POST["btn1"] == "btnHersteller")){
                   // Zweite Runde Auswahl Model
-                  echo '<div class="col-2">';
+                  echo '<div class="col-2 mb-3">';
                     // Erstes Textfeld: Nur gewählter Hersteller
                     $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
                     $result = $conn->query($sql)->fetch();
@@ -93,7 +134,7 @@
                   echo '</div>';
                 } else if (($_POST["btn1"] == "btnModell")){
                   // Hersteller
-                  echo '<div class="col-2">'; 
+                  echo '<div class="col-2 mb-3">'; 
                     echo '<input type="text" readonly class="form-control" name="txtHersteller" value="'.$_POST['txtHersteller'].'">';
                     echo '<input type="hidden" name="txtHerstellerId" value="'.$_POST['txtHerstellerId'].'">';
                   echo '</div>';  
@@ -127,7 +168,7 @@
                 }
                 ?>
                 <div class="col-3">
-                  <button type="submit" class="btn btn-danger" name="btn1" value="return">Abbruch</button>';
+                  <button type="submit" class="btn btn-danger" name="btn1" value="return">Abbruch</button>
                 </div>
             </div>
           </form>
