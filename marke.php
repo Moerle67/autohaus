@@ -177,12 +177,13 @@
                   echo '</div>';
                   echo '<div class="col-2 sb-3">';
                     echo '<label for="txtKm" class="form-input mb-2">akt. km</label>';
-                    echo '<input type="number" class="form-control" id="txtKm">';
+                    echo '<input type="number" class="form-control" id="txtKm" name="txtKm">';
                   echo '</div>';
                   echo '<div class="col-2 sb-3">';
                     echo '<label for="btnKfz" class="form-label">Abschluss</label><br />';
                     echo '<button type="submit" id="btnKfz" class="btn btn-success" name="btn1" value="btnModell">Vermieten</button>';
                   echo '</div>';
+                } else if (($_POST["btn1"] == "btnKfZ")){
                 }
                 ?>
                 <div class="col-2 ">     
