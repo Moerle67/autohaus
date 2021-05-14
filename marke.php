@@ -19,9 +19,9 @@
       <div class="row">         
         <div class="col-md-10">
           <form method="POST">          
-            <div class="row">
+            <div class="row mt-7">
               <!-- Mitarbeiter -->
-              <div class="col-6 mb-3">
+              <div class="col-md-6 mb-3">
                 <label for="inputMitarbeiter" class="form-label">Mitarbeiter</label>
                 <select class="form-select"  name="selMa" id="inputMitarbeiter">
                 <?php
@@ -38,7 +38,7 @@
                 </select>
               </div>
               <!-- Kunde -->
-              <div class="col-6 mb-3">
+              <div class="col-md-6 mb-3">
               <label for="inputKunde" class="form-label">Kunde</label>
                 <select class="form-select"  name="selKunde" id="inputKunde">
                 <?php
@@ -55,9 +55,10 @@
                 </select>
               </div>
             </div>
+            <!-- Fahrzeugauswahl -->
             <div class="row">
                 <?php
-                // Auswahl Fahrzeug
+// Auswahl Fahrzeug
                 // Erste Runde Hersteller auswählen
                 // if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //   var_dump($_POST);
@@ -77,14 +78,16 @@
                     // Anzahl gefundener Datensätze
                     if (count($result)>1) {
                       // Liste generieren 
-                      echo '<select class="form-select" name="selHersteller">';
+                      echo '<label for="selHersteller" class="form-label">Kunde</label>';
+                      echo '<select class="form-select" name="selHersteller" id="selHersteller">';
                       foreach  ($result as $row) {
                         echo '<option value="'.$row['id'].'">'.$row['Bezeichnung'].'</option>';
                       }
                     echo '</select>';
                     } else if (count($result)==1) {
                       // ein Datensatz --> Textfeld reicht  
-                      echo '<input type="text" readonly class="form-control" value="'.$result[0]['Bezeichnung'].'">';
+                      echo '<label for="txtHersteller" class="form-label">Kunde</label>';
+                      echo '<input type="text" id="txtHersteller" readonly class="form-control" value="'.$result[0]['Bezeichnung'].'">';
                       echo '<input type="hidden" name="selHersteller" value="'.$result[0]['id'].'">';
                     } else
                       // nichts --> Fehlermeldung
@@ -93,16 +96,18 @@
                   if (count($result)>0) {
                     // Weiter nur, wenn Fahrzeug verfügbar ist   
                     echo '<div class="col-3">';
-                      echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnHersteller">Hersteller festlegen</button>';
+                      echo '<label for="btnHersteller" class="form-label">Bestätigen</label><br />';
+                      echo '<button type="submit" class="btn btn-primary" id="btnHersteller" name="btn1" value="btnHersteller">Hersteller festlegen</button>';
                     echo '</div>';
                   }
                 } else if (($_POST["btn1"] == "btnHersteller")){
-                  // Zweite Runde Auswahl Model
+// Zweite Runde Auswahl Model
                   echo '<div class="col-2 mb-3">';
                     // Erstes Textfeld: Nur gewählter Hersteller
                     $sql =  'SELECT * FROM hersteller WHERE hersteller_id='.$_POST['selHersteller'];
                     $result = $conn->query($sql)->fetch();
-                    echo '<input type="text" readonly class="form-control" name="txtHersteller" value="'.$result['Bezeichnung'].'">';
+                    echo '<label for="txtlHersteller" class="form-label">Hersteller</label>';
+                    echo '<input type="text" readonly id="txtHersteller" class="form-control" name="txtHersteller" value="'.$result['Bezeichnung'].'">';
                     echo '<input type="hidden" name="txtHerstellerId" value="'.$result['hersteller_id'].'">';
                   echo '</div>';    
                   // Modell einlesen
@@ -118,31 +123,37 @@
                       GROUP BY modell.bezeichnung;";
                   $result = $conn->query($sql)->fetchAll();
                   if (count($result)>1) {
-                    echo '<select class="form-select"  name="selModell">';
+                    echo '<label for="selModel" class="form-label">Modell</label>';
+                    echo '<select class="form-select"  name="selModell" id="selModell">';
                     foreach  ($conn->query($sql) as $row) {
                       echo '<option value="'.$row['modell_id'].'">'.$row['bezeichnung'].'</option>';
                     }
                     echo '</select>';
                   } else {
                     // ein Datensatz --> Textfeld reicht  
-                    echo '<input type="text" readonly class="form-control" value="'.$result[0]['bezeichnung'].'">';
+                    echo '<label for="selModel" class="form-label">Modell</label>';
+                    echo '<input type="text" readonly id="selModel" class="form-control" value="'.$result[0]['bezeichnung'].'">';
                     echo '<input type="hidden" name="selModell" value="'.$result[0]['modell_id'].'">';
                   }
                   echo '</div>';
                   echo '<div class="col-3">';
-                    echo '<button type="submit" class="btn btn-primary" name="btn1" value="btnModell">Modell festlegen</button>';
+                  echo '<label for="btnModel" class="form-label">Bestätigen</label><br />';
+                  echo '<button type="submit" id="btnModell" class="btn btn-primary" name="btn1" value="btnModell">Modell festlegen</button>';
                   echo '</div>';
                 } else if (($_POST["btn1"] == "btnModell")){
+// Auswahl Fahrzeug
                   // Hersteller
                   echo '<div class="col-2 mb-3">'; 
-                    echo '<input type="text" readonly class="form-control" name="txtHersteller" value="'.$_POST['txtHersteller'].'">';
+                    echo '<label for="txtHersteller" class="form-label">Hersteller</label>';
+                    echo '<input type="text" readonly id="txtHersteller" class="form-control" name="txtHersteller" value="'.$_POST['txtHersteller'].'">';
                     echo '<input type="hidden" name="txtHerstellerId" value="'.$_POST['txtHerstellerId'].'">';
                   echo '</div>';  
                   echo '<div class="col-2">';
                     // Zweites Textfeld: Nur gewähltes Modell
                     $sql =  'SELECT * FROM modell WHERE modell_id='.$_POST['selModell'];
                     $result = $conn->query($sql)->fetch();
-                    echo '<input type="text" readonly class="form-control" name="txtModell" value="'.$result['bezeichnung'].'">';
+                    echo '<label for="txtModell" class="form-label">Modell</label>';
+                    echo '<input type="text" id="txtModell" readonly class="form-control" name="txtModell" value="'.$result['bezeichnung'].'">';
                     echo '<input type="hidden" name="txtModellId" value="'.$result['modell_id'].'">';
                   echo '</div>';  
                   echo '<div class="col-2">';
@@ -150,25 +161,33 @@
                   $sql =  'SELECT * FROM fahrzeug WHERE modell='.$_POST['selModell'].' AND verfügbar=1;' ;
                   $result = $conn->query($sql)->fetchAll();
                   if (count($result)>1) {
-                    echo '<select class="form-select"  name="selFahrzeug">';
+                    echo '<label for="selKfz" class="form-label">Fahrzeug</label>';
+                    echo '<select class="form-select" id="selKfz" name="selFahrzeug">';
                     foreach  ($conn->query($sql) as $row) {
                       echo '<option value="'.$row['frz_id'].'">'.$row['kennzeichen'].'</option>';
                     }
                     echo '</select>';
                   } else {
                     // Nur ein Fahrzeug
-                    echo '<input type="text" readonly class="form-control" value="'.$result[0]['kennzeichen'].'">';
+                    echo '<label for="txtKfz" class="form-label">Fahrzeug</label>';
+                    echo '<input type="text" id="txtKfz" readonly class="form-control" value="'.$result[0]['kennzeichen'].'">';
                     echo '<input type="hidden" name="selModell" value="'.$result[0]['frz_id'].'">';
                  
                   }
                   echo '</div>';
-                  echo '<div class="col-3">';
-                    echo '<button type="submit" class="btn btn-success" name="btn1" value="btnModell">Vermieten</button>';
+                  echo '<div class="col-2 sb-3">';
+                    echo '<label for="txtKm" class="form-input mb-2">akt. km</label>';
+                    echo '<input type="number" class="form-control" id="txtKm">';
+                  echo '</div>';
+                  echo '<div class="col-2 sb-3">';
+                    echo '<label for="btnKfz" class="form-label">Abschluss</label><br />';
+                    echo '<button type="submit" id="btnKfz" class="btn btn-success" name="btn1" value="btnModell">Vermieten</button>';
                   echo '</div>';
                 }
                 ?>
-                <div class="col-3">
-                  <button type="submit" class="btn btn-danger" name="btn1" value="return">Abbruch</button>
+                <div class="col-2 ">     
+                  <br />                             
+                  <button type="submit" class="btn btn-danger float-end mt-2" name="btn1" value="return" id="btnReturn">Abbruch</button>
                 </div>
             </div>
           </form>
