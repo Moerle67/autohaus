@@ -171,7 +171,7 @@
                     // Nur ein Fahrzeug
                     echo '<label for="txtKfz" class="form-label">Fahrzeug</label>';
                     echo '<input type="text" id="txtKfz" readonly class="form-control" value="'.$result[0]['kennzeichen'].'">';
-                    echo '<input type="hidden" name="selModell" value="'.$result[0]['frz_id'].'">';
+                    echo '<input type="hidden" name="selKfz" value="'.$result[0]['frz_id'].'">';
                  
                   }
                   echo '</div>';
@@ -181,9 +181,34 @@
                   echo '</div>';
                   echo '<div class="col-2 sb-3">';
                     echo '<label for="btnKfz" class="form-label">Abschluss</label><br />';
-                    echo '<button type="submit" id="btnKfz" class="btn btn-success" name="btn1" value="btnModell">Vermieten</button>';
+                    echo '<button type="submit" id="btnKfz" class="btn btn-success" name="btn1" value="btnAbschluss">Vermieten</button>';
                   echo '</div>';
-                } else if (($_POST["btn1"] == "btnKfZ")){
+                } else if (($_POST["btn1"] == "btnAbschluss")){
+                    $kunde = $_POST['selKunde'];
+                    $mitarbeiter = $_POST['selMa'];
+                    $fahrzeug = $_POST["selKfz"];
+                    $kmStart = $_POST["txtKm"];
+                    date_default_timezone_set("Europe/Berlin");
+                    $phptime=time();
+                    $datStart = date ('Y-m-d H:i:s', $phptime);
+
+                    // Auftrag in die Datenbank schreiben
+                    $sql = "INSERT INTO auftrag (kunde, mitarbeiter, Fahrzeug, abgeholt, kmStart)
+                      VALUES ('$kunde', '$mitarbeiter', '$fahrzeug', '$datStart', '$kmStart')";
+                    if ($conn->query($sql) == True) {
+                      echo "Auftrag erfolgreich";
+                    } else {
+                      echo "Error: " . $sql . "<br>" . $conn->error;
+                    }                    
+                    // Fahrzeug als nicht verfügbar markieren
+                    $sql = "UPDATE fahrzeug SET verfügbar=False WHERE frz_id=$fahrzeug;";
+                    if ($conn->query($sql) == True) {
+                      echo "Fahrzeug erfolgreich";
+                    } else {
+                      echo "Error: " . $sql . "<br>" . $conn->error;
+                    }                    
+                    // header("Location: https://www.codegrepper.com/my-redirect-page.php");
+                    // die();
                 }
                 ?>
                 <div class="col-2 ">     
