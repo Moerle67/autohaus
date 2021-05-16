@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Mai 2021 um 12:54
+-- Erstellungszeit: 16. Mai 2021 um 19:18
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -35,10 +35,19 @@ CREATE TABLE `auftrag` (
   `kunde` int(11) NOT NULL,
   `mitarbeiter` int(11) NOT NULL,
   `Fahrzeug` int(11) NOT NULL,
-  `erteilt` date NOT NULL,
-  `abgeholt` date NOT NULL,
-  `zurueck` date NOT NULL
+  `erteilt` date DEFAULT NULL,
+  `abgeholt` date DEFAULT NULL,
+  `zurueck` date DEFAULT NULL,
+  `kmStart` int(11) NOT NULL,
+  `kmEnde` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `auftrag`
+--
+
+INSERT INTO `auftrag` (`auftrag_id`, `kunde`, `mitarbeiter`, `Fahrzeug`, `erteilt`, `abgeholt`, `zurueck`, `kmStart`, `kmEnde`) VALUES
+(9, 1, 1, 6, NULL, '2021-05-16', NULL, 123456, NULL);
 
 -- --------------------------------------------------------
 
@@ -63,9 +72,10 @@ INSERT INTO `fahrzeug` (`frz_id`, `modell`, `kennzeichen`, `preisgruppe`, `verf�
 (2, 17, 'S-MS-002', 4, 1),
 (3, 17, 'S-MS-003', 3, 1),
 (4, 17, 'S-MS-004', 4, 1),
-(6, 4, 'S-MS-105', 2, 1),
+(6, 4, 'S-MS-105', 2, 0),
 (7, 7, 'S-MS 105', 4, 1),
-(8, 18, 'S-MS-106', 3, 1);
+(8, 18, 'S-MS-106', 3, 1),
+(9, 11, 'S MS-110', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -101,6 +111,16 @@ CREATE TABLE `kunde` (
   `vorname` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Daten für Tabelle `kunde`
+--
+
+INSERT INTO `kunde` (`kunde_id`, `name`, `vorname`) VALUES
+(1, 'Paulsen', 'Pauline'),
+(2, 'Lehman', 'Frank'),
+(3, 'Schulze', 'Bärbel'),
+(4, 'Kohlesen', 'Corinna');
+
 -- --------------------------------------------------------
 
 --
@@ -112,6 +132,16 @@ CREATE TABLE `mitarbeiter` (
   `name` varchar(255) NOT NULL,
   `vorname` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `mitarbeiter`
+--
+
+INSERT INTO `mitarbeiter` (`ma_id`, `name`, `vorname`) VALUES
+(1, 'Maier', 'Hans'),
+(2, 'Mörl', 'Ingo'),
+(3, 'Müller', 'Susanne'),
+(4, 'Kalupke', 'Erna');
 
 -- --------------------------------------------------------
 
@@ -236,13 +266,13 @@ ALTER TABLE `preisgruppe`
 -- AUTO_INCREMENT für Tabelle `auftrag`
 --
 ALTER TABLE `auftrag`
-  MODIFY `auftrag_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `auftrag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `frz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `frz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT für Tabelle `hersteller`
@@ -254,13 +284,13 @@ ALTER TABLE `hersteller`
 -- AUTO_INCREMENT für Tabelle `kunde`
 --
 ALTER TABLE `kunde`
-  MODIFY `kunde_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `kunde_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `mitarbeiter`
 --
 ALTER TABLE `mitarbeiter`
-  MODIFY `ma_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ma_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `modell`
