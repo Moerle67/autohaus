@@ -8,29 +8,21 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Hello, world!</title>
+    <title>&copy; Moerlisoft</title>
   </head>
   <body>
     <div class="container">
-        <h1>Autohaus &copy; Moerlisoft</h1>
-        <div class="row">
-            <div class="col-10">
-            </div>
-            <div class="col-2">
-                <div class="d-grid gap-2 col-7 mx-auto">
-                    <a href="#"><button type="button" class="btn btn-primary navi">Stammdaten</button></a>
-                </div>
-                <div class="d-grid gap-2 col-7 mx-auto">
-                    <a href="#"><button type="button" class="btn btn-primary navi">Kraftfahzeug bestellen</button></a>
-                </div>
-                <div class="d-grid gap-2 col-7 mx-auto">
-                    <a href="#"><button type="button" class="btn btn-primary navi">Kraftfahrzeug abholen</button></a>
-                </div>
-                <div class="d-grid gap-2 col-7 mx-auto">
-                    <a href="#"><button type="button" class="btn btn-primary navi">Kraftfahrzeug zurück geben</button></a>
-                </div>
-            </div>
-        </div>
+      <?php
+          include "dat/dat1.php";
+      ?>
+      <h1>Autohaus &copy; Moerlisoft</h1>
+      <div class="row">         
+        <div class="col-md-10">
+        </div>        
+          <?php
+              include "seite.html"
+          ?>
+      </div>
     </div>
 
     <!-- Optional JavaScript; choose one of the two! -->

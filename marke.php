@@ -25,7 +25,7 @@
                 <label for="inputMitarbeiter" class="form-label">Mitarbeiter</label>
                 <select class="form-select"  name="selMa" id="inputMitarbeiter">
                 <?php
-                  var_dump($_POST);
+                  // var_dump($_POST);
                   $sql =  'SELECT * FROM mitarbeiter';
                   foreach  ($conn->query($sql) as $row) {
                     echo '<option value="'.$row['ma_id'].'"';
