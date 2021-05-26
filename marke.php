@@ -161,7 +161,7 @@
                   $result = $conn->query($sql)->fetchAll();
                   if (count($result)>1) {
                     echo '<label for="selKfz" class="form-label">Fahrzeug</label>';
-                    echo '<select class="form-select" id="selKfz" name="selFahrzeug">';
+                    echo '<select class="form-select" id="selKfz" name="selKfz">';
                     foreach  ($conn->query($sql) as $row) {
                       echo '<option value="'.$row['frz_id'].'">'.$row['kennzeichen'].'</option>';
                     }
