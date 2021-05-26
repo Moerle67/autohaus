@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Mai 2021 um 11:52
+-- Erstellungszeit: 26. Mai 2021 um 13:20
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -30,7 +30,6 @@ USE `autohaus`;
 -- Tabellenstruktur f체r Tabelle `auftrag`
 --
 
-DROP TABLE IF EXISTS `auftrag`;
 CREATE TABLE `auftrag` (
   `auftrag_id` int(11) NOT NULL,
   `kunde` int(11) NOT NULL,
@@ -61,7 +60,6 @@ INSERT INTO `auftrag` (`auftrag_id`, `kunde`, `mitarbeiter`, `Fahrzeug`, `erteil
 -- Tabellenstruktur f체r Tabelle `fahrzeug`
 --
 
-DROP TABLE IF EXISTS `fahrzeug`;
 CREATE TABLE `fahrzeug` (
   `frz_id` int(11) NOT NULL,
   `modell` int(11) NOT NULL,
@@ -130,7 +128,6 @@ INSERT INTO `fahrzeug` (`frz_id`, `modell`, `kennzeichen`, `preisgruppe`, `verf�
 -- Tabellenstruktur f체r Tabelle `hersteller`
 --
 
-DROP TABLE IF EXISTS `hersteller`;
 CREATE TABLE `hersteller` (
   `hersteller_id` int(11) NOT NULL,
   `Bezeichnung` varchar(255) NOT NULL
@@ -153,7 +150,6 @@ INSERT INTO `hersteller` (`hersteller_id`, `Bezeichnung`) VALUES
 -- Tabellenstruktur f체r Tabelle `kunde`
 --
 
-DROP TABLE IF EXISTS `kunde`;
 CREATE TABLE `kunde` (
   `kunde_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -176,7 +172,6 @@ INSERT INTO `kunde` (`kunde_id`, `name`, `vorname`) VALUES
 -- Tabellenstruktur f체r Tabelle `mitarbeiter`
 --
 
-DROP TABLE IF EXISTS `mitarbeiter`;
 CREATE TABLE `mitarbeiter` (
   `ma_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -199,7 +194,6 @@ INSERT INTO `mitarbeiter` (`ma_id`, `name`, `vorname`) VALUES
 -- Tabellenstruktur f체r Tabelle `modell`
 --
 
-DROP TABLE IF EXISTS `modell`;
 CREATE TABLE `modell` (
   `modell_id` int(11) NOT NULL,
   `bezeichnung` varchar(255) NOT NULL,
@@ -238,7 +232,6 @@ INSERT INTO `modell` (`modell_id`, `bezeichnung`, `hersteller`) VALUES
 -- Tabellenstruktur f체r Tabelle `preisgruppe`
 --
 
-DROP TABLE IF EXISTS `preisgruppe`;
 CREATE TABLE `preisgruppe` (
   `preisgr_id` int(11) NOT NULL,
   `bezeichnung` varchar(255) NOT NULL,
