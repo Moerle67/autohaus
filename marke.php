@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>&copy; Moerlisoft</title>
   </head>
+  
   <body>
     <div class="container">
       <?php
           include "dat/dat1.php";
       ?>
-      <h1>Autohaus &copy; Moerlisoft</h1>
+      <h1>Autohaus &copy; Moerlisoft Test</h1>
       <div class="row">         
         <div class="col-md-10">
           <form method="POST">          
