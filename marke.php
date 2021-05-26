@@ -42,7 +42,6 @@
               <label for="inputKunde" class="form-label">Kunde</label>
                 <select class="form-select"  name="selKunde" id="inputKunde">
                 <?php
-                  var_dump($_POST);
                   $sql =  'SELECT * FROM kunde';
                   foreach  ($conn->query($sql) as $row) {
                     echo '<option value="'.$row['kunde_id'].'"';
@@ -207,8 +206,8 @@
                     } else {
                       echo "Error: " . $sql . "<br>" . $conn->error;
                     }                    
-                    // header("Location: https://www.codegrepper.com/my-redirect-page.php");
-                    // die();
+                    header("Location: index.php");
+                    die();
                 }
                 ?>
                 <div class="col-2 ">     

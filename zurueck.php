@@ -18,6 +18,60 @@
       <h1>Autohaus &copy; Moerlisoft</h1>
       <div class="row">         
         <div class="col-md-10">
+        <?php
+          $sql =  'SELECT 
+            fahrzeug.kennzeichen AS kennzeichen,
+            kunde.name AS name,
+            kunde.vorname AS vorname,
+            mitarbeiter.name AS ma,
+            auftrag.abgeholt AS abgeholt,
+            auftrag.kmStart as kmstart, 
+            auftrag.auftrag_id as id
+            FROM auftrag 
+            INNER JOIN fahrzeug 
+            INNER JOIN kunde 
+            INNER JOIN mitarbeiter 
+            ON auftrag.Fahrzeug = fahrzeug.frz_id
+            AND auftrag.kunde = kunde.kunde_id 
+            AND auftrag.mitarbeiter = mitarbeiter.ma_id 
+            WHERE zurueck IS NULL 
+            ORDER BY abgeholt ASC  
+          ';
+          echo '<form method="POST" action="./auswertung.php">';
+          foreach  ($conn->query($sql) as $row) {
+            echo '<div class="row mt-7 gx-5">'; 
+              echo '<div class="col mb-3 border bf-light p-3">';              
+                echo $row["kennzeichen"];
+              echo '</div>';
+              echo '<div class="col mb-3 border bf-light p-3">';              
+                echo $row["abgeholt"];
+              echo '</div>';
+              echo '<div class="col mb-3 border bf-light p-3">';              
+                echo $row["name"].", ".$row["vorname"];
+              echo '</div>';
+              echo '<div class="col mb-3 border bf-light p-3">';              
+                echo $row["ma"];
+              echo '</div>';
+              echo '<div class="col mb-3 border bf-light p-3">';              
+                echo $row["kmstart"];
+              echo '</div>';
+              echo '<div class="col-2 mb-3 border bf-light p-3">';              
+                echo '<input type="number" class="form-control" id="kmZurueck" value="';
+                echo $row["kmstart"].'" min="';
+                echo $row["kmstart"];
+                echo '" name="km_';
+                echo $row["id"];
+                echo '" >';
+              echo '</div>';
+              echo '<div class="col mb-3 border bf-light p-3">';
+                echo '<button type="submit" class="btn btn-success" name="button" value="';
+                echo $row["id"];
+                echo '">Rückgabe</button>';
+              echo '</div>';
+            echo '</div>';
+          }
+          echo '</form>';
+        ?>
         </div>        
           <?php
               include "seite.html"
