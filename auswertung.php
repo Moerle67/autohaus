@@ -66,9 +66,12 @@
         $tage = intdiv($zeitdiff,3600*24);
         $reststunden = $zeitdiff - $tage*3600*24;
         $stunden = intdiv($reststunden, 3600);
-        $preis = ($tage*24+$stunden)*intval($result['prstunde'])+$km*intval($result['prkm'])+intval($result['prpauschal']);
+        $preisStunde = ($tage*24+$stunden)*intval($result['prstunde']);
+        $preiskm =  ($km-$result['kmstart'])*$result['prkm'];
+        $preispauschal = intval($result['prpauschal']);
+        $preis = ($preisStunde+$preiskm+$preispauschal)/100;
         echo "<tr><td>Dauer</td><td>".$tage." Tage und ".$stunden." Stunden </td></tr>";
-        echo "<tr><td>Preisgruppe: ".$result['prname']."</td><td>Preis: ".($preis/100)." €</td></tr>";
+        echo "<tr><td>Preisgruppe: ".$result['prname']."</td><td>Preis: ".$preis." €</td></tr>";
         echo "</table>";
         $frz_id = $result['frz_id'];
         $sql = "UPDATE fahrzeug SET verfügbar=True WHERE frz_id=$frz_id;";
