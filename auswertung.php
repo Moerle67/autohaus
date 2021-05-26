@@ -21,6 +21,7 @@
   <body>
     <div class="container">
     <div class="row">
+    <div class="col-md-10">
     <h1>Abschluss</h1>
     <?php
         include "dat/dat1.php";
@@ -53,7 +54,7 @@
         $result = $conn->query($sql)->fetch();
         echo "<table>";
         echo "<tr><td>Fahrzeug</td><td>".$result['kennzeichen']."</td></tr>";
-        echo "<tr><td>Kunde</td><td>".$result['name']."</td></tr>";
+        echo "<tr><td>Kunde</td><td>".$result['name'].", ".$result['vorname']."</td></tr>";
         echo "<tr><td>Verleih-Datum</td><td>".$result['abgeholt']."</td></tr>";
         echo "<tr><td>Km-Start</td><td>".$result['kmstart']."</td></tr>";
         echo "<tr><td>Km-Rückgabe</td><td>".$km."</td></tr>";
@@ -84,6 +85,10 @@
         }                    
 
     ?>
+    </div>
+        <?php
+            include "seite.html"
+        ?>
     </div>
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
